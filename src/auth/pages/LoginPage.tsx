@@ -1,4 +1,3 @@
-"use client";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -10,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 
-function LoginForm(){
+function LoginPage(){
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -88,4 +87,4 @@ function LoginForm(){
 
 }
 
-export default LoginForm;
+export default LoginPage;

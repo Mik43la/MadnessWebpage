@@ -1,7 +1,5 @@
-"use client";
-
 import NavBar from "../components/NavBar";
-import ArtistsSection from "./ArtistsSection";
+import ArtistsSection from "../components/ArtistsSection";
 
 
 function ArtistsPage() {

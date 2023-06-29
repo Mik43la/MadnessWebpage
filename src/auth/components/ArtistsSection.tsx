@@ -1,8 +1,7 @@
-"use client";
 import { DataGrid, GridRowId, GridPaginationModel } from '@mui/x-data-grid';
 import { createFakeServer } from '@mui/x-data-grid-generator';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import NavBar from '../components/NavBar';
+import NavBar from './NavBar';
 import { Button } from '@mui/material';
 
 const PAGE_SIZE = 10;
@@ -13,7 +12,7 @@ const SERVER_OPTIONS = {
 
 const { useQuery, ...data } = createFakeServer({}, SERVER_OPTIONS);
 
-function EventsSection() {
+function ArtistsSection() {
 
     const mapPageToNextCursor = useRef<{ [page: number]: GridRowId }>({});
 
@@ -59,45 +58,25 @@ function EventsSection() {
       );
     }, [pageInfo?.totalRowCount, setRowCountState]);
   
-    const columns = [
-        {...pageInfo},
-        {
-          field: 'actions',
-          headerName: 'Actions',
-          width: 200,
-          renderCell: (params) => (
-            <div>
-              <Button onClick={() =>{/**/ }}>Edit</Button>
-              <Button onClick={() => {/**/ }}>Delete</Button>
-            </div>
-          ),
-        },
-      ];
 
     return(
         <>
        
         <div  style={{ height: 550, width: '100%', padding:'10px' }}>
         <DataGrid
-            
-           {...data}
-           rows={rows}
-          
-           
-            
+            rows={rows}
+            {...data}
             pageSizeOptions={[PAGE_SIZE]}
             rowCount={rowCountState}
             paginationMode="server"
             onPaginationModelChange={handlePaginationModelChange}
             paginationModel={paginationModel}
             loading={isLoading}
-            experimentalFeatures={{ columnGrouping: true }}
-            checkboxSelection
-            disableRowSelectionOnClick
         />
-         
+           
+
         </div>
         </>
     );
 }
-export default EventsSection;
+export default ArtistsSection;

@@ -1,8 +1,7 @@
 
-"use client";
 import { Button } from "@mui/material";
 import NavBar from "../components/NavBar";
-import EventsSection from "./EventsSection";
+import EventsSection from "../components/EventsSection";
 
 
 
