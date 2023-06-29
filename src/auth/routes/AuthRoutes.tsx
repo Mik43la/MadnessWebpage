@@ -7,10 +7,10 @@ import ArtistsPage from "../pages/ArtistsPage";
 export const AuthRoute = () => {
   return (
     <Routes>
-      <Route path="/auth/login" element={<LoginPage/>} />
-      <Route path="auth/home" element={<HomePage/>}/>
-      <Route path="auth/events" element={<EventsPage/>}/>
-      <Route path="auth/artists" element={<ArtistsPage/>}/>
+      <Route path="/login" element={<LoginPage/>} />
+      <Route path="/home" element={<HomePage/>}/>
+      <Route path="/events" element={<EventsPage/>}/>
+      <Route path="/artists" element={<ArtistsPage/>}/>
       <Route path="/auth/*" element={<Navigate to="/auth/login" />} />
     </Routes>
   )
