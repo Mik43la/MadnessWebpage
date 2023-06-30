@@ -11,7 +11,7 @@ export const AuthRoute = () => {
       <Route path="/home" element={<HomePage/>}/>
       <Route path="/events" element={<EventsPage/>}/>
       <Route path="/artists" element={<ArtistsPage/>}/>
-      <Route path="/auth/*" element={<Navigate to="/auth/login" />} />
+      <Route path="/*" element={<Navigate to="/auth/login" />} />
     </Routes>
   )
 };
