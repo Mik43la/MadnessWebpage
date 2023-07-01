@@ -1,82 +1,98 @@
-import { DataGrid, GridRowId, GridPaginationModel } from '@mui/x-data-grid';
-import { createFakeServer } from '@mui/x-data-grid-generator';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import NavBar from './NavBar';
-import { Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import useFetch from '../../hooks/useFetch';
+import {
+  DataGrid,GridColDef, GridValueGetterParams
+} from '@mui/x-data-grid';
+import { randomNumberBetween } from '@mui/x-data-grid/utils/utils';
 
-const PAGE_SIZE = 10;
+//const { useQuery, ...data } = createFakeServer({}, SERVER_OPTIONS);
+ //const {useQuery, ...data} =  useFetch('http://localhost:1337/api/artists/');
 
-const SERVER_OPTIONS = {
-  useCursorPagination: true,
-};
 
-const { useQuery, ...data } = createFakeServer({}, SERVER_OPTIONS);
+/*
 
-function ArtistsSection() {
 
-    const mapPageToNextCursor = useRef<{ [page: number]: GridRowId }>({});
+const columnGroupingModel: GridColumnGroupingModel = [
 
-    const [paginationModel, setPaginationModel] = useState({
-      page: 0,
-      pageSize: PAGE_SIZE,
-    });
+  {
+    groupId: 'naming',
+    headerName: 'Full name (freeReordering)',
+    freeReordering: true,
+    children: [{ field: 'name' }, { field: 'rating' }],
+  },
+];*/
+
+
+function generateRandom() {
+  var length = 8,
+      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      retVal = "";
+  for (var i = 0, n = charset.length; i < length; ++i) {
+      retVal += charset.charAt(Math.floor(Math.random() * n));
+  }
+  return retVal;
+}
+
+function ArtistsSection() { 
   
-    const queryOptions = useMemo(
-      () => ({
-        cursor: mapPageToNextCursor.current[paginationModel.page - 1],
-        pageSize: paginationModel.pageSize,
-      }),
-      [paginationModel],
-    );
-    const { isLoading, rows, pageInfo } = useQuery(queryOptions);
-  
-    const handlePaginationModelChange = (newPaginationModel: GridPaginationModel) => {
-      // We have the cursor, we can allow the page transition.
-      if (
-        newPaginationModel.page === 0 ||
-        mapPageToNextCursor.current[newPaginationModel.page - 1]
-      ) {
-        setPaginationModel(newPaginationModel);
-      }
-    };
-  
-    useEffect(() => {
-      if (!isLoading && pageInfo?.nextCursor) {
-        // We add nextCursor when available
-        mapPageToNextCursor.current[paginationModel.page] = pageInfo?.nextCursor;
-      }
-    }, [paginationModel.page, isLoading, pageInfo?.nextCursor]);
+  const [tableData, setTableData] = useState([])
 
-    const [rowCountState, setRowCountState] = useState(
-      pageInfo?.totalRowCount || 0,
-    );
-    useEffect(() => {
-      setRowCountState((prevRowCountState) =>
-        pageInfo?.totalRowCount !== undefined
-          ? pageInfo?.totalRowCount
-          : prevRowCountState,
-      );
-    }, [pageInfo?.totalRowCount, setRowCountState]);
+  useEffect(()=>{
+    updateTable()
+    console.log(tableData)
+  })
+
+  const {loading, error, data} = useFetch('http://localhost:1337/api/artists');
+
+  const updateTable = () => {
+    if(data && !loading && tableData.length === 0){
+      console.log(data, "AAAAA")
+        setTableData([ ...tableData,  ...data])
+    }
+  }
+
+  if(loading) return <p> Loading...</p>
+  if(error) return <p> AAA</p>
+
   
+   
+  
+
+  const columns:  GridColDef[]= [
+    { field: 'id', headerName: 'ID', width: 200 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 250,
+      valueGetter: (params:GridValueGetterParams ) => params.row.attributes.name,
+    },
+    {
+      field: 'rating',
+      headerName: 'Rating',
+      type: 'number',
+      width: 210,
+      valueGetter: (params:GridValueGetterParams ) => params.row.attributes.rating,
+    },
+  ];
+
+
+
+ 
 
     return(
-        <>
-       
-        <div  style={{ height: 550, width: '100%', padding:'10px' }}>
-        <DataGrid
-            rows={rows}
-            {...data}
-            pageSizeOptions={[PAGE_SIZE]}
-            rowCount={rowCountState}
-            paginationMode="server"
-            onPaginationModelChange={handlePaginationModelChange}
-            paginationModel={paginationModel}
-            loading={isLoading}
-        />
-           
-
-        </div>
-        </>
+      
+      <div style={{ height: 400, width: '100%' }}>
+        
+      <DataGrid
+        rows={tableData}
+        columns={columns}
+        getRowId={(row: any) => generateRandom()}
+        experimentalFeatures={{ columnGrouping: true }}
+        checkboxSelection
+        disableRowSelectionOnClick
+        //columnGroupingModel={columnGroupingModel}
+      />
+    </div>
     );
 }
 export default ArtistsSection;
