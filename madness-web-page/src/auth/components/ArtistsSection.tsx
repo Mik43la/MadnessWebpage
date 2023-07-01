@@ -4,6 +4,7 @@ import {
   DataGrid,GridColDef, GridValueGetterParams
 } from '@mui/x-data-grid';
 import { randomNumberBetween } from '@mui/x-data-grid/utils/utils';
+import Button from '@mui/material/Button/Button';
 
 //const { useQuery, ...data } = createFakeServer({}, SERVER_OPTIONS);
  //const {useQuery, ...data} =  useFetch('http://localhost:1337/api/artists/');
@@ -73,6 +74,13 @@ function ArtistsSection() {
       width: 210,
       valueGetter: (params:GridValueGetterParams ) => params.row.attributes.rating,
     },
+    {
+      field:'options', 
+      headerName:'Options', 
+      width:300, 
+      renderCell: (params) => {return  <> <Button>Edit</Button> <Button>Delete</Button></> }
+    },
+    
   ];
 
 
@@ -90,6 +98,8 @@ function ArtistsSection() {
         experimentalFeatures={{ columnGrouping: true }}
         checkboxSelection
         disableRowSelectionOnClick
+        editMode='cell'
+  
         //columnGroupingModel={columnGroupingModel}
       />
     </div>

@@ -4,6 +4,7 @@ import {
   DataGrid,GridColDef, GridValueGetterParams
 } from '@mui/x-data-grid';
 import { randomNumberBetween } from '@mui/x-data-grid/utils/utils';
+import { Button } from '@mui/material';
 
 function generateRandom() {
   var length = 8,
@@ -61,6 +62,12 @@ function EventsSection() {
       type: 'number',
       width: 210,
       valueGetter: (params:GridValueGetterParams ) => params.row.attributes.onSale,
+    },
+    {
+      field:'options', 
+      headerName:'Options', 
+      width:300, 
+      renderCell: (params) => {return  <> <Button>Edit</Button> <Button>Delete</Button></> }
     },
   ];
 
