@@ -86,7 +86,7 @@ function ArtistsSection() {
       <DataGrid
         rows={tableData}
         columns={columns}
-        getRowId={(row: any) => generateRandom()}
+     //   getRowId={(row: any) => generateRandom()}
         experimentalFeatures={{ columnGrouping: true }}
         checkboxSelection
         disableRowSelectionOnClick
