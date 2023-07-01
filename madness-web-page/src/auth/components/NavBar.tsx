@@ -12,7 +12,7 @@ export const NavBar = () => {
         <Toolbar >
           
           <Typography variant="h6"  component="div" sx={{ flexGrow: 2 }}>
-            Madness
+            Non Stop The Madness
           </Typography>
       
           <Button color="inherit">Logout</Button>
