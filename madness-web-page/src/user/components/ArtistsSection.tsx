@@ -1,20 +1,13 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DataGrid,
   GridColDef,
-  GridValueGetterParams
+  GridValueGetterParams,
+  GridCellParams,
 } from '@mui/x-data-grid';
 import StarIcon from '@mui/icons-material/Star';
-
-function generateRandom() {
-  var length = 8,
-      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-      retVal = "";
-  for (var i = 0, n = charset.length; i < length; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
-  }
-  return retVal;
-}
+import Button from '@mui/material/Button';
+import CustomModal from './CustomModal';
 
 function RatingCell({ value }: GridValueGetterParams) {
   const rating = parseFloat(value as string);
@@ -33,52 +26,67 @@ function RatingCell({ value }: GridValueGetterParams) {
 
 function ArtistsSection() {
   const [tableData, setTableData] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState(null);
 
   useEffect(() => {
     updateTable();
   }, []);
 
-  const updateTable = () => {
-    const testData = [
-      { id: 1, name: 'Artist 1', rating: '4.5' },
-      { id: 2, name: 'Artist 2', rating: '4.2' },
-      { id: 3, name: 'Artist 3', rating: '3.8' },
-    ];
-    setTableData(testData);
+  const updateTable = async () => {
+    try {
+      const response = await fetch('http://localhost:1337/api/artists');
+      const data = await response.json();
+      setTableData(data.data);
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 200 },
-    { field: 'name', headerName: 'Name', width: 250 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 250,
+      valueGetter: (params: GridValueGetterParams) => params.row.attributes.name,
+    },
     {
       field: 'rating',
       headerName: 'Rating',
-      type: 'string',
       width: 210,
-      renderCell: RatingCell,
+      renderCell: (params: GridCellParams) => (
+        <RatingCell value={params.row.attributes.rating} />
+      ),
     },
   ];
 
   const tableStyles = {
     height: 400,
     width: '100%',
-    backgroundColor: '#EDE7F6', // Color de fondo morado pastel
-    margin: 'auto', // Centrar la tabla horizontalmente
+    backgroundColor: '#EDE7F6',
+    margin: 'auto',
   };
 
   return (
-    <div style={tableStyles}>
-      <DataGrid
-        rows={tableData}
-        columns={columns}
-        checkboxSelection
-        disableColumnFilter // Eliminar los filtros de columna
-        disableColumnMenu // Eliminar el menú de columna
-        disableDensitySelector // Eliminar el selector de densidad
-        disableColumnSelector // Eliminar el selector de columnas
-        disableToolbar // Eliminar la barra de herramientas
-        disableRowSelectionOnClick
-      />
+    <div>
+      <div style={tableStyles}>
+        <DataGrid
+          rows={tableData}
+          columns={columns}
+          checkboxSelection
+          disableColumnFilter
+          disableColumnMenu
+          disableDensitySelector
+          disableColumnSelector
+          disableToolbar
+          disableRowSelectionOnClick
+        />
+      </div>
+      <CustomModal open={openModal} onClose={handleCloseModal} artist={selectedArtist} />
     </div>
   );
 }

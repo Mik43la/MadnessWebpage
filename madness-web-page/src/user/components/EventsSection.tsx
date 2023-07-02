@@ -1,47 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridValueGetterParams, GridCellParams } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
-
-function generateRandom() {
-  var length = 8,
-    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-    retVal = "";
-  for (var i = 0, n = charset.length; i < length; ++i) {
-    retVal += charset.charAt(Math.floor(Math.random() * n));
-  }
-  return retVal;
-}
+import CustomModal from './CustomModal';
 
 function EventsSection() {
   const [tableData, setTableData] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     updateTable();
   }, []);
 
-  const updateTable = () => {
-    const testData = [
-      { id: 1, name: 'Event 1', date: new Date('2023-07-01'), onSale: 'Yes' },
-      { id: 2, name: 'Event 2', date: new Date('2023-07-02'), onSale: 'No' },
-      { id: 3, name: 'Event 3', date: new Date('2023-07-03'), onSale: 'Yes' },
-    ];
-    setTableData(testData);
+  const updateTable = async () => {
+    try {
+      const response = await fetch('http://localhost:1337/api/events');
+      const data = await response.json();
+      setTableData(data.data);
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
   };
-  
 
   const handleBuyTicket = (params: GridCellParams) => {
-    console.log('Buy ticket for event:', params.row);
+    const event = params.row;
+    setSelectedEvent(event);
+    setOpenModal(true);
   };
 
-  const handleForum = (params: GridCellParams) => {
-    console.log('Go to forum for event:', params.row);
+  const handleModalClose = () => {
+    setOpenModal(false);
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 200 },
-    { field: 'name', headerName: 'Name', width: 250 },
-    { field: 'date', headerName: 'Date', type: 'date', width: 210 },
-    { field: 'onSale', headerName: 'On Sale', width: 210 },
+    { field: 'name', headerName: 'Name', width: 250,
+      renderCell: (params: GridCellParams) => params.row.attributes.name },
+    {
+      field: 'date',
+      headerName: 'Date',
+      type: 'date',
+      width: 210,
+      renderCell: (params: GridCellParams) => {
+        const date = new Date(params.row.attributes.date);
+        const formattedDate = date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+        return formattedDate;
+      },
+    },
+    { field: 'onSale', headerName: 'On Sale', width: 210,
+      renderCell: (params: GridCellParams) => params.row.attributes.onSale ? 'Yes' : 'No',
+    },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -51,7 +62,7 @@ function EventsSection() {
           <Button variant="outlined" onClick={() => handleBuyTicket(params)}>
             Buy Ticket
           </Button>
-          <Button variant="outlined" onClick={() => handleForum(params)}>
+          <Button variant="outlined" >
             Forum
           </Button>
         </div>
@@ -72,13 +83,20 @@ function EventsSection() {
         rows={tableData}
         columns={columns}
         checkboxSelection
-        disableColumnFilter // Eliminar los filtros de columna
-        disableColumnMenu // Eliminar el menú de columna
-        disableDensitySelector // Eliminar el selector de densidad
-        disableColumnSelector // Eliminar el selector de columnas
-        disableToolbar // Eliminar la barra de herramientas
-        disableRowSelectionOnClick // Deshabilitar la selección de fila al hacer clic
+        disableColumnFilter
+        disableColumnMenu
+        disableDensitySelector
+        disableColumnSelector
+        disableToolbar
+        disableRowSelectionOnClick
       />
+      {selectedEvent && (
+        <CustomModal
+          open={openModal}
+          onClose={handleModalClose}
+          event={selectedEvent}
+        />
+      )}
     </div>
   );
 }
