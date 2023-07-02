@@ -6,8 +6,10 @@ import { UserRoute } from "../user/routes/UserRoutes";
 export const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/auth/login/*" element={<AuthRoute />} index={true} />
+
+      
       <Route path="/user/*" element={<UserRoute />} />
+      <Route path="/auth/*" element={<AuthRoute />} />
       
     
     </Routes>
