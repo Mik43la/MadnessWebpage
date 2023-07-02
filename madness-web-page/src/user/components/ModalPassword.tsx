@@ -33,12 +33,12 @@ function ModalPassword({ open, onClose, onSubmit }) {
           <TextField
             value={password}
             onChange={handlePasswordChange}
-            label="Password"
+            label="Ticket Code"
             type="password"
             fullWidth
             required
             error={incorrectPassword} // Mostrar error si la contraseña es incorrecta
-            helperText={incorrectPassword && 'Incorrect password. Please try again.'} // Mensaje de error
+            helperText={incorrectPassword && 'Incorrect Code. Please try again.'} // Mensaje de error
           />
           <DialogActions>
             <Button onClick={onClose}>Cancel</Button>

@@ -67,6 +67,12 @@
     },
     "ticketCode": {
       "type": "string"
+    },
+    "commentEvent": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "integer"
     }
   }
 }

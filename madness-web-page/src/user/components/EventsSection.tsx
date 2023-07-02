@@ -44,7 +44,12 @@ function EventsSection() {
   };
 
   const handleCommentButtonClick = () => {
-    setShowPasswordModal(true); // Muestra el modal de contraseña al hacer clic en el botón "Forum"
+    if (openModal) {
+      setOpenModal(false);
+      setShowPasswordModal(true);
+    } else {
+      setShowPasswordModal(true);
+    }
   };
 
   const columns: GridColDef[] = [

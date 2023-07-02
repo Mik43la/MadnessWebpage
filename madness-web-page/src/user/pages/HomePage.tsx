@@ -1,75 +1,53 @@
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import { Card, CardActionArea, CardActions, CardContent, CardMedia, Grid } from '@mui/material';
 import NavBar from '../components/NavBar';
 import { useNavigate } from "react-router-dom";
+import background from "../../assets/background.jpg";
+import musica from "../../assets/musica.jpg";
 
-function HomePage(){
-    const navigate = useNavigate();
+function HomePage() {
+  const navigate = useNavigate();
 
-    const goTo = (url) => {
-        navigate(url);
-      };
+  const goTo = (url) => {
+    navigate(url);
+  };
 
-    return(
-        <>
-        <NavBar></NavBar>
-        <Grid container direction="row" alignContent="center"  spacing={10} sx={{my:10, mx:10, px:10 } } >
-        <Grid item >
-            <Card sx={{ maxWidth: 545 }}>
-            <CardActionArea onClick={() => goTo('/auth/events')}>
-                <CardMedia
-                    component="img"
-                    height="140"
-                    image="https://source.unsplash.com/random?wallpapers"
-                    alt="green iguana"
-                />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    Events
+  return (
+    <>
+      <NavBar />
+      <div
+        style={{
+          backgroundImage: `url(${background})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: 'calc(100vh - 64px)', // Adjust the value based on your navbar height
+          padding: '40px',
+        }}
+      ></div>
+      <Grid container spacing={4} alignItems="center" justifyContent="center" sx={{ marginTop: '40px' }}>
+        <Grid item xs={12} md={6} lg={4}>
+          <Card sx={{ bgcolor: '#3b3b3b', color: 'white' }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="200"
+                image={musica}
+                alt="Event"
+              />
+              <CardContent>
+                <Typography variant="body2">
+                  La Música Nos Une
+                  3 días de festival en el corazón de Bolivia, 2 escenarios, artistas y DJs reconocidos mundialmente. Cada año Non Stop the Madness supera nuestras expectativas y nos trae los shows en vivo y un sinfín de experiencias.
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Events section
-                </Typography>
-            </CardContent>
+              </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Click for more
-                </Button>
-            </CardActions>
-            </Card>
+          </Card>
         </Grid>
-        <Grid item >
-            <Card sx={{ maxWidth: 545 }}>
-            <CardActionArea onClick={() => goTo('/auth/artists')}>
-                <CardMedia
-                    component="img"
-                    height="140"
-                    image="https://source.unsplash.com/random?wallpapers"
-                    alt="green iguana"
-                />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    Artists
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Artists section
-                </Typography>
-            </CardContent>
-            </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Click for more
-                </Button>
-            </CardActions>
-            </Card>
-        </Grid>
-        
-        </Grid>
-        </>
-    )
-
+        {/* Rest of the code */}
+      </Grid>
+    </>
+  );
 }
+
 export default HomePage;

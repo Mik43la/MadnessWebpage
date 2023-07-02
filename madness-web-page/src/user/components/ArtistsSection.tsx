@@ -77,7 +77,6 @@ function ArtistsSection() {
         <DataGrid
           rows={tableData}
           columns={columns}
-          checkboxSelection
           disableColumnFilter
           disableColumnMenu
           disableDensitySelector
