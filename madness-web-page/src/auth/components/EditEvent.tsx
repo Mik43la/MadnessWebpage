@@ -8,23 +8,22 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import usePost from "../../hooks/useSend";
-import useFetch from "../../hooks/useFetch";
-import caller from "../../helpers/caller";
-import { useQuery } from "@tanstack/react-query";
-import { artistService } from "../services/artistsServices";
-import { ArtistModel } from "../models/artist";
+import { EventModel } from "../models/event";
+import { eventsServices } from "../services/eventsServices";
 
 
 
- export const Edit = ({open,setOpen, info}) => {
+ export const EditEvent = ({open,setOpen, info}) => {
     const authToken =
    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg4MjQzMTk5LCJleHAiOjE2OTA4MzUxOTl9.Swyps8IOPavayQnXlSAgTLDpOLeM4jXRXqW5TmnGFwc";
-      const [artistName, setArtistName] = useState("");
-      const [ratingArtist, setRatingArtist] = useState();
+      const [eventName, setEventName] = useState("");
+      const [eventDate, setEventDate] = useState();
+      const [eventSale, setEventSale] = useState(true);
+
       useEffect(()=> {
-        console.log(info,"djdjjdjd")
+       
             if(info>0){
-                console.log("entraA",info)
+                console.log("",info)
                 
             }
       },[])
@@ -32,7 +31,7 @@ import { ArtistModel } from "../models/artist";
         const {
             handleSubmit,
         } = useForm();
-      const { loading, success, error, postData } =  usePost('http://localhost:1337/api/artists');
+      const { loading, success, error, postData } =  usePost('http://localhost:1337/api/events');
    
       const handleClick = () => {
         setOpen(!open);
@@ -40,23 +39,25 @@ import { ArtistModel } from "../models/artist";
 
 
       const onSubmit = (data) => {
-        const artistData = 
+        const eventData = 
             {
             "data": {
-                "name": artistName,
-                "rating":ratingArtist
+                "name": eventName,
+                "date":eventDate,
+                "onSale":eventSale
                 }
             }
         
         if(info===0){
-            console.log("sdkjfbkj", artistData, info)
-            postData(artistData);
+            console.log("sdkjfbkj", eventData, info)
+            postData(eventData);
         }else{
-            const putInfo:ArtistModel= {
-                "name": artistName,
-                "rating":parseInt(ratingArtist)
+            const putInfo:EventModel= {
+              "name": eventName,
+              "date":eventDate.Date(),
+              "onSale":eventSale
             }
-            artistService.putArtist(authToken,putInfo,info)
+            eventsServices.putEvent(authToken,putInfo,info)
             
         }
         
@@ -98,7 +99,7 @@ import { ArtistModel } from "../models/artist";
                     variant="outlined"
                     label="Name of Artist"
                     id="name"
-                    onChange={(e) => setArtistName(e.target.value)}
+                    onChange={(e) => setEventName(e.target.value)}
                     >
                     
                     </TextField>
@@ -109,11 +110,23 @@ import { ArtistModel } from "../models/artist";
                     fullWidth
                     margin="dense"
                     variant="outlined"
-                    label="Rating: How many stars? (1-5)"
-                    type="number"
+                    label="Date of the event"
+                    type="date"
                     
-                    id="rating"
-                    onChange={(e) => setRatingArtist(parseInt(e.target.value))}
+                    id="date"
+                    onChange={(e) => setEventDate(new Date(e.target.value))}
+                    />
+                </Grid>
+                <Grid item xs={10} margin={1}>
+                    <TextField 
+                    fullWidth
+                    margin="dense"
+                    variant="outlined"
+                    label="On Sale"
+                    type="string"
+                   
+                    id="onSale"
+                    onChange={(e) => setEventSale(new Boolean(e.target.value))}
                     />
                 </Grid>
                 
@@ -131,4 +144,4 @@ import { ArtistModel } from "../models/artist";
 
     );
 }
-export default Edit;
+export default EditEvent;

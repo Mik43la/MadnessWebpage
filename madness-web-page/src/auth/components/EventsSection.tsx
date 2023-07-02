@@ -3,21 +3,24 @@ import useFetch from '../../hooks/useFetch';
 import {
   DataGrid,GridColDef, GridValueGetterParams
 } from '@mui/x-data-grid';
-import { randomNumberBetween } from '@mui/x-data-grid/utils/utils';
 import { Button } from '@mui/material';
-
-function generateRandom() {
-  var length = 8,
-      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-      retVal = "";
-  for (var i = 0, n = charset.length; i < length; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
-  }
-  return retVal;
-}
+import { eventsServices } from '../services/eventsServices';
+import ModalEvent from './ModalEvent';
 
 function EventsSection() { 
-  
+  const [openModal, setOpenModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [sendId, setSendId] = useState()
+  const authrequest =   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg4MjQzMTk5LCJleHAiOjE2OTA4MzUxOTl9.Swyps8IOPavayQnXlSAgTLDpOLeM4jXRXqW5TmnGFwc";
+ 
+  const handleClickModal = (id) => {
+        setSendId(id)
+        setOpenModal(true);
+        handleClose()
+    }
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
   const [tableData, setTableData] = useState([])
 
   useEffect(()=>{
@@ -38,7 +41,14 @@ function EventsSection() {
   if(error) return <p> AAA</p>
 
   
-   
+    
+  const handleDelete = (id) => {
+      
+    eventsServices.deleteEvent(authrequest,id)
+ }
+
+ 
+
   
 
   const columns:  GridColDef[]= [
@@ -67,7 +77,12 @@ function EventsSection() {
       field:'options', 
       headerName:'Options', 
       width:300, 
-      renderCell: (params) => {return  <> <Button>Comments</Button><Button>Edit</Button> <Button>Delete</Button></> }
+      renderCell: (params) => {
+        return  <> 
+        <Button onClick={()=>handleClickModal(params.id)}>Edit</Button> 
+        <Button onClick={()=> {if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(params.id)}}>Delete</Button>
+        </> 
+        }
     },
   ];
 
@@ -76,7 +91,7 @@ function EventsSection() {
  
 
     return(
-      
+      <>
       <div style={{ height: 400, width: '100%' }}>
         
       <DataGrid
@@ -89,6 +104,9 @@ function EventsSection() {
         //columnGroupingModel={columnGroupingModel}
       />
     </div>
+         <ModalEvent open={openModal} setOpen={setOpenModal} info={sendId}></ModalEvent>
+         </>
+
     );
 }
 export default EventsSection;

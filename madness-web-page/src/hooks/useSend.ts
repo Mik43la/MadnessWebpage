@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useSend = (url) => {
+const usePost = (url) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -35,4 +35,5 @@ const useSend = (url) => {
   return { loading, success, error, postData };
 };
 
-export default useSend;
+
+export default usePost;

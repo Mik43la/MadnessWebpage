@@ -4,7 +4,7 @@ import { AuthRoute } from "../auth/routes/AuthRoutes";
 export const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/auth/*" element={<AuthRoute />} />
+      <Route path="/auth/*" element={<AuthRoute />}  />
     
     </Routes>
   );

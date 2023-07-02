@@ -5,23 +5,19 @@ import {
 } from '@mui/x-data-grid';
 import Button from '@mui/material/Button/Button';
 import ModalArtist from './ModalArtist';
+import { artistService } from '../services/artistsServices';
+import {authService} from '../services/authService'
 
 
-function generateRandom() {
-  var length = 8,
-      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-      retVal = "";
-  for (var i = 0, n = charset.length; i < length; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
-  }
-  return retVal;
-}
+
 
 function ArtistsSection() { 
 
   const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [sendId, setSendId] = useState()
+  const authrequest =   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg4MjQzMTk5LCJleHAiOjE2OTA4MzUxOTl9.Swyps8IOPavayQnXlSAgTLDpOLeM4jXRXqW5TmnGFwc";
+ 
   const handleClickModal = (id) => {
         setSendId(id)
         setOpenModal(true);
@@ -51,6 +47,11 @@ function ArtistsSection() {
   if(error) return <p> AAA</p>
 
   
+   const handleDelete = (id) => {
+      
+      artistService.deleteArtist(authrequest,id)
+   }
+
    
   
 
@@ -73,7 +74,12 @@ function ArtistsSection() {
       field:'options', 
       headerName:'Options', 
       width:300, 
-      renderCell: (params) => {return  <> <Button onClick={()=>handleClickModal(params.id)}>Edit</Button> <Button>Delete</Button></> }
+      renderCell: (params) => {
+        return  <> 
+        <Button onClick={()=>handleClickModal(params.id)}>Edit</Button> 
+        <Button onClick={()=> {if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(params.id)}}>Delete</Button>
+        </> 
+      }
     },
     
   ];
