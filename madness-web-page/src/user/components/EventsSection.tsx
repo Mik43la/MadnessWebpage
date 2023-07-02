@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridValueGetterParams, GridCellParams } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import CustomModal from './CustomModal';
+import ModalPassword from './ModalPassword';
 
 function EventsSection() {
   const [tableData, setTableData] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   useEffect(() => {
     updateTable();
@@ -32,6 +34,19 @@ function EventsSection() {
     setOpenModal(false);
   };
 
+  const handlePasswordSubmit = (password) => {
+    if (password === "1234") {
+      setShowPasswordModal(false);
+      window.location.href = '/user/forum'; // Redirige al usuario a la ruta del foro
+    } else {
+      alert('Incorrect password. Please try again.');
+    }
+  };
+
+  const handleCommentButtonClick = () => {
+    setShowPasswordModal(true); // Muestra el modal de contraseña al hacer clic en el botón "Forum"
+  };
+
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', width: 250,
       renderCell: (params: GridCellParams) => params.row.attributes.name },
@@ -54,18 +69,23 @@ function EventsSection() {
       renderCell: (params: GridCellParams) => params.row.attributes.onSale ? 'Yes' : 'No',
     },
     {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 200,
+      field: 'buyTicket',
+      headerName: 'Buy Ticket',
+      width: 150,
       renderCell: (params: GridCellParams) => (
-        <div>
-          <Button variant="outlined" onClick={() => handleBuyTicket(params)}>
-            Buy Ticket
-          </Button>
-          <Button variant="outlined" >
-            Forum
-          </Button>
-        </div>
+        <Button variant="outlined" onClick={() => handleBuyTicket(params)}>
+          Buy Ticket
+        </Button>
+      ),
+    },
+    {
+      field: 'forum',
+      headerName: 'Forum',
+      width: 150,
+      renderCell: () => (
+        <Button variant="outlined" onClick={handleCommentButtonClick}>
+          Forum
+        </Button>
       ),
     },
   ];
@@ -73,7 +93,7 @@ function EventsSection() {
   const tableStyles = {
     height: 400,
     width: '100%',
-    backgroundColor: '#E1BEE7', // Color de fondo morado pastel
+    backgroundColor: '#EDE7F6', // Color de fondo morado pastel
     margin: 'auto', // Centrar la tabla horizontalmente
   };
 
@@ -82,7 +102,6 @@ function EventsSection() {
       <DataGrid
         rows={tableData}
         columns={columns}
-        checkboxSelection
         disableColumnFilter
         disableColumnMenu
         disableDensitySelector
@@ -91,11 +110,20 @@ function EventsSection() {
         disableRowSelectionOnClick
       />
       {selectedEvent && (
-        <CustomModal
-          open={openModal}
-          onClose={handleModalClose}
-          event={selectedEvent}
-        />
+        <>
+          {showPasswordModal && (
+            <ModalPassword
+              open={showPasswordModal}
+              onClose={() => setShowPasswordModal(false)}
+              onSubmit={handlePasswordSubmit}
+            />
+          )}
+          <CustomModal
+            open={openModal}
+            onClose={handleModalClose}
+            event={selectedEvent}
+          />
+        </>
       )}
     </div>
   );
