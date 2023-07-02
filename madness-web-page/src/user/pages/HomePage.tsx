@@ -5,6 +5,8 @@ import NavBar from '../components/NavBar';
 import { useNavigate } from "react-router-dom";
 import background from "../../assets/background.jpg";
 import musica from "../../assets/musica.jpg";
+import gastronomia from "../../assets/gastronomia.jpg";
+import experiencia from "../../assets/experiencia.jpg";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -44,7 +46,42 @@ function HomePage() {
             </CardActionArea>
           </Card>
         </Grid>
-        {/* Rest of the code */}
+        <Grid item xs={12} md={6} lg={4}>
+          <Card sx={{ bgcolor: '#3b3b3b', color: 'white' }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="200"
+                image={gastronomia}
+                alt="Event"
+              />
+              <CardContent>
+                <Typography variant="body2">
+                La Capital Gastronómica
+Durante los 3 días de festival podrás disfrutar de propuestas gastronómicas en nuestra plaza de comidas departe de los restaurantes más reconocidos de la ciudad de Cochabamba mientras escuchas a tu artista favorito.
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <Card sx={{ bgcolor: '#3b3b3b', color: 'white' }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="200"
+                image={experiencia}
+                alt="Event"
+              />
+              <CardContent>
+                <Typography variant="body2">
+                No Solo es Fiesta, Sino Experiencia
+Dentro del festival podrás disfrutar de zonas experienciales exclusivas donde podrás divertirte, comer, tomar fotografias y mas!
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
       </Grid>
     </>
   );
