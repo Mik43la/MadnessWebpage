@@ -3,11 +3,23 @@ import DialogTitle from '@mui/material/DialogTitle';
 import EditArtist from './EditArtist';
 import { useParams, useNavigate } from "react-router-dom";
 import useFetch from '../../hooks/useFetch';
+import {useState, useEffect } from 'react';
 
 
-const ModalArtist = ({ open, setOpen}) => {
-    const {dataId} = useParams();
-    const {loading, error, data } = useFetch('http://localhost:1337/artists/' +dataId)
+const ModalArtist = ({ open, setOpen, info}) => {
+
+
+     console.log(info,"infoo")
+
+    const [dataId, setDataId] =useState();
+
+    useEffect(()=> {
+   //   console.log(info, "JJJJJ")
+      setDataId(info)
+    },[open])
+
+    //const {loading, error, data } = useFetch(`http://localhost:1337/artists/${dataId}`)
+
     const handleClick = () => {
         setOpen(!open);
       };
@@ -24,8 +36,8 @@ const ModalArtist = ({ open, setOpen}) => {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">{`${dataId ? "Edit" : "Create"}`}</DialogTitle>
-       
-        <EditArtist info={data} open={open} setOpen={setOpen}></EditArtist>
+   
+        <EditArtist info={dataId} open={open} setOpen={setOpen}></EditArtist>
          
          
       </Dialog>

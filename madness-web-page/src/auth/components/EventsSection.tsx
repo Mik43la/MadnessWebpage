@@ -67,7 +67,7 @@ function EventsSection() {
       field:'options', 
       headerName:'Options', 
       width:300, 
-      renderCell: (params) => {return  <> <Button>Edit</Button> <Button>Delete</Button></> }
+      renderCell: (params) => {return  <> <Button>Comments</Button><Button>Edit</Button> <Button>Delete</Button></> }
     },
   ];
 

@@ -7,6 +7,7 @@ import ModalArtist from "../components/ModalArtist";
 function ArtistsPage() {
     const [openModal, setOpenModal] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
     const handleClickModal = () => {
           setOpenModal(true);
           handleClose()
@@ -14,6 +15,7 @@ function ArtistsPage() {
       const handleClose = () => {
         setAnchorEl(null);
       };
+      
     return (
         <>
         <NavBar></NavBar>
@@ -28,7 +30,7 @@ function ArtistsPage() {
         <div className="pb-10 pt-5 pl-10 pr-10 mx-auto ">
             <ArtistsSection></ArtistsSection>
         </div>
-        <ModalArtist open={openModal} setOpen={setOpenModal} ></ModalArtist>
+        <ModalArtist open={openModal} setOpen={setOpenModal} info={0} ></ModalArtist>
         </>
     );
 }

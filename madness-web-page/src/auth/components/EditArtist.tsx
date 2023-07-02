@@ -1,38 +1,40 @@
-import { Grid, TextField, Typography } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { addPost, getPostById, updatePost } from "../../services/blogService";
+
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import useSend from "../../hooks/useSend";
+import useFetch from "../../hooks/useFetch";
+import caller from "../../helpers/caller";
 
 
-export const Edit = ({open,setOpen, info}) => {
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-        setValue
-      } = useForm();
-      const handleClick = () => {
-        setOpen(!open);
-      };
-      const data = info;
-        /*
-      useEffect(()=> {
-        setValue("name", data?.name);
-        setValue("rating", Number(data?.rating));
-      },[])*/
+ export const Edit = ({open,setOpen, info}) => {
    
       const [artistName, setArtistName] = useState("");
       const [ratingArtist, setRatingArtist] = useState();
+      useEffect(()=> {
+        console.log(info,"djdjjdjd")
+            if(info>0){
+                console.log("entraA",info)
+                //const {loadd, errorr, dataa} = useFetch(`http://localhost:1337/artists/${info}`)
+               // console.log(dataa)
 
+            }
+      },[])
+
+        const {
+            handleSubmit,
+        } = useForm();
       const { loading, success, error, postData } =  useSend('http://localhost:1337/api/artists');
-
+   
+      const handleClick = () => {
+        setOpen(!open);
+      };
+      
 
       const onSubmit = (data) => {
         const artistData = 
@@ -41,11 +43,11 @@ export const Edit = ({open,setOpen, info}) => {
             "rating":ratingArtist}
         }
         
-        if(data.id){
-
-        }else{
-           console.log("sdkjfbkj", artistData)
+        if(info===0){
+            console.log("sdkjfbkj", artistData, info)
             postData(artistData);
+        }else{
+           console.log("dit",info)
         }
         
       };
@@ -59,6 +61,8 @@ export const Edit = ({open,setOpen, info}) => {
           }
         }
       }, [open]);
+
+      
     return (
         <>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,14 +75,7 @@ export const Edit = ({open,setOpen, info}) => {
             <Grid container>
             
             <Grid item xs={12}>
-                <Grid container direction="row" >
-                <Grid item xs={8}>
-                    <Typography  variant="h5">
-                    Add a new Artist!
-                    </Typography>
-                </Grid>
-            
-                </Grid>
+                
                 <Grid
                 container
                 direction="row"
@@ -90,8 +87,6 @@ export const Edit = ({open,setOpen, info}) => {
                     margin="dense"
                     variant="outlined"
                     label="Name of Artist"
-                   
-                    
                     id="name"
                     onChange={(e) => setArtistName(e.target.value)}
                     >
@@ -106,7 +101,6 @@ export const Edit = ({open,setOpen, info}) => {
                     variant="outlined"
                     label="Rating: How many stars? (1-5)"
                     type="number"
-                  
                     
                     id="rating"
                     onChange={(e) => setRatingArtist(parseInt(e.target.value))}

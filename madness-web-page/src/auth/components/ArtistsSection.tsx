@@ -3,25 +3,8 @@ import useFetch from '../../hooks/useFetch';
 import {
   DataGrid,GridColDef, GridValueGetterParams
 } from '@mui/x-data-grid';
-import { randomNumberBetween } from '@mui/x-data-grid/utils/utils';
 import Button from '@mui/material/Button/Button';
-
-//const { useQuery, ...data } = createFakeServer({}, SERVER_OPTIONS);
- //const {useQuery, ...data} =  useFetch('http://localhost:1337/api/artists/');
-
-
-/*
-
-
-const columnGroupingModel: GridColumnGroupingModel = [
-
-  {
-    groupId: 'naming',
-    headerName: 'Full name (freeReordering)',
-    freeReordering: true,
-    children: [{ field: 'name' }, { field: 'rating' }],
-  },
-];*/
+import ModalArtist from './ModalArtist';
 
 
 function generateRandom() {
@@ -35,6 +18,18 @@ function generateRandom() {
 }
 
 function ArtistsSection() { 
+
+  const [openModal, setOpenModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [sendId, setSendId] = useState()
+  const handleClickModal = (id) => {
+        setSendId(id)
+        setOpenModal(true);
+        handleClose()
+    }
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
   
   const [tableData, setTableData] = useState([])
 
@@ -78,7 +73,7 @@ function ArtistsSection() {
       field:'options', 
       headerName:'Options', 
       width:300, 
-      renderCell: (params) => {return  <> <Button>Edit</Button> <Button>Delete</Button></> }
+      renderCell: (params) => {return  <> <Button onClick={()=>handleClickModal(params.id)}>Edit</Button> <Button>Delete</Button></> }
     },
     
   ];
@@ -88,7 +83,7 @@ function ArtistsSection() {
  
 
     return(
-      
+      <>
       <div style={{ height: 400, width: '100%' }}>
         
       <DataGrid
@@ -102,7 +97,9 @@ function ArtistsSection() {
   
         //columnGroupingModel={columnGroupingModel}
       />
-    </div>
+      </div>
+     <ModalArtist open={openModal} setOpen={setOpenModal} info={sendId}></ModalArtist>
+     </>
     );
 }
 export default ArtistsSection;
