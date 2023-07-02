@@ -16,11 +16,11 @@ export const NavBar = () => {
         <AppBar position="static" >
         <Toolbar >
          
-            <Typography variant="h6" onClick={() => goTo('/auth/home')} component="div" sx={{ flexGrow: 2 }}>
-              Madness
-            </Typography>
-         
+        
           
+          <Typography variant="h6"  component="div" sx={{ flexGrow: 2 }}>
+            Non Stop The Madness
+          </Typography>
       
           <Button onClick={() => goTo('/auth/login')}  color="inherit">Logout</Button>
         </Toolbar>
